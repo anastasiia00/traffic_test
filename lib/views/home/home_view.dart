@@ -18,27 +18,13 @@ class HomeView extends StatelessWidget {
           CharacterBloc(RepositoryProvider.of<RemoteServices>(context))
             ..add(LoadCharacterEvent()),
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           title: const Text(
             'Choose your favourite character',
           ),
           centerTitle: true,
         ),
-        // drawer: Drawer(
-        //   child: Column(
-        //     mainAxisAlignment: MainAxisAlignment.center,
-        //     children: [
-        //       ElevatedButton(
-        //         child: Text('Light Mode'),
-        //         onPressed: () {},
-        //       ),
-        //       ElevatedButton(
-        //         child: Text('Dark Mode'),
-        //         onPressed: () {},
-        //       ),
-        //     ],
-        //   ),
-        // ), //TODO:
         body: BlocBuilder<CharacterBloc, CharacterState>(
           builder: (context, state) {
             if (state is CharacterLoadingState) {
@@ -62,13 +48,8 @@ class HomeView extends StatelessWidget {
                         ),
                         child: InkWell(
                           onLongPress: () {
-                            // PageTransition(
-                            //   child: DetailView(element: userList[index]),
-                            //   type: PageTransitionType.rightToLeft,
-                            // // );
                             Navigator.of(context)
                                 .push(MaterialPageRoute(builder: (context) {
-                              // return PageTransition(child: DetailView(element: userList[index], type: PageTransitionType.fade,),
                               return DetailView(element: characterList[index]);
                             }));
                           },
@@ -92,11 +73,11 @@ class HomeView extends StatelessWidget {
                   height: 400,
                   child: Column(
                     children: [
-                      Image.network(
-                        'https://cdn.dribbble.com/users/2624304/screenshots/7142781/media/0121d5720b6cc0bbf06f3d2aed4d913a.jpeg?compress=1&resize=400x300',
+                      Image.asset(
+                        'assets/0121d5720b6cc0bbf06f3d2aed4d913a.jpg',
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(
+                      const Padding(
+                        padding: EdgeInsets.only(
                           left: 26,
                           right: 26,
                           top: 42,
