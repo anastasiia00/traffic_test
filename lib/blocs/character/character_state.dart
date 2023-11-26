@@ -15,6 +15,9 @@ class CharacterLoadingState extends CharacterState {
 class CharacterLoadedState extends CharacterState {
   List<CharacterModel> character;
 
+  List<CharacterModel> get favourites =>
+      character.where((element) => element.isFavourite).toList();
+
   CharacterLoadedState(this.character);
 
   @override

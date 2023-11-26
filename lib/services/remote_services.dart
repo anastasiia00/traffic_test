@@ -14,7 +14,7 @@ class RemoteServices {
     if (response.statusCode == 200) {
       final List result = jsonDecode(response.body)['results'];
       List<CharacterModel> bus = [];
-      for (CharacterModel element in result) {
+      for (dynamic element in result) {
         bus.add(CharacterModel.fromNetwork(element));
       }
       return bus;

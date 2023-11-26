@@ -1,22 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:test_project/models/character_model.dart';
 
 class CharacterItem extends StatelessWidget {
   const CharacterItem({
     Key? key,
-    this.name,
-    this.status,
-    this.species,
-    this.type,
-    this.gender,
-    this.image,
+    required this.characterModel,
+    required this.onAddToFavourite,
+    required this.onRemoveFromFavourite,
   }) : super(key: key);
 
-  final String? name;
-  final String? status;
-  final String? species;
-  final String? type;
-  final String? gender;
-  final String? image;
+  final CharacterModel characterModel;
+  final Function onAddToFavourite;
+  final Function onRemoveFromFavourite;
 
   @override
   Widget build(BuildContext context) {
@@ -26,20 +21,17 @@ class CharacterItem extends StatelessWidget {
         color: Colors.black12,
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 10,
+        padding: const EdgeInsets.only(
+          left: 16,
+          right: 24,
+          top: 10,
+          bottom: 10,
         ),
         child: Row(
           children: [
-            image != null
-                ? CircleAvatar(
-                    foregroundImage: NetworkImage(image!),
-                  )
-                : const CircleAvatar(
-                    foregroundImage: NetworkImage(
-                        'https://media.istockphoto.com/illustrations/blank-man-profile-head-icon-placeholder-illustration-id1298261537?k=20&m=1298261537&s=612x612&w=0&h=8plXnK6Ur3LGqG9s-Xt2ZZfKk6bI0IbzDZrNH9tr9Ok='),
-                  ),
+            CircleAvatar(
+              foregroundImage: NetworkImage(characterModel.image),
+            ),
             Padding(
               padding: const EdgeInsets.only(
                 left: 16,
@@ -47,19 +39,34 @@ class CharacterItem extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  name != null
-                      ? Text(
-                          name!,
-                        )
-                      : const SizedBox(),
-                  gender != null
-                      ? Text(
-                          gender!,
-                        )
-                      : const SizedBox(),
+                  Text(
+                    characterModel.name,
+                  ),
+                  Text(
+                    characterModel.gender,
+                  ),
                 ],
               ),
             ),
+            const Spacer(),
+            !characterModel.isFavourite
+                ? IconButton(
+                    onPressed: () {
+                      onAddToFavourite();
+                    },
+                    icon: const Icon(
+                      Icons.favorite_border,
+                      size: 24,
+                    ),
+                  )
+                : IconButton(
+                    onPressed: () {
+                      onRemoveFromFavourite();
+                    },
+                    icon: const Icon(
+                      Icons.favorite_outlined,
+                    ),
+                  ),
           ],
         ),
       ),

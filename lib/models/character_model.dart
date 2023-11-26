@@ -20,6 +20,7 @@ class CharacterModel {
   final List<String> episode;
   final String url;
   final String created;
+  final bool isFavourite;
   CharacterModel({
     required this.id,
     required this.name,
@@ -33,6 +34,7 @@ class CharacterModel {
     required this.episode,
     required this.url,
     required this.created,
+    this.isFavourite = false,
   });
 
   CharacterModel copyWith({
@@ -48,6 +50,7 @@ class CharacterModel {
     List<String>? episode,
     String? url,
     String? created,
+    bool? isFavourite,
   }) {
     return CharacterModel(
       id: id ?? this.id,
@@ -62,6 +65,7 @@ class CharacterModel {
       episode: episode ?? this.episode,
       url: url ?? this.url,
       created: created ?? this.created,
+      isFavourite: isFavourite ?? this.isFavourite,
     );
   }
 
@@ -79,6 +83,7 @@ class CharacterModel {
       'episode': episode,
       'url': url,
       'created': created,
+      'isFavourite': isFavourite,
     };
   }
 
@@ -93,11 +98,10 @@ class CharacterModel {
       origin: OriginModel.fromMap(map['origin'] as Map<String, dynamic>),
       location: LocationModel.fromMap(map['location'] as Map<String, dynamic>),
       image: map['image'] as String,
-      episode: List<String>.from(
-        (map['episode'] as List<String>),
-      ),
+      episode: List<String>.from((map['episode'] as List<String>)),
       url: map['url'] as String,
       created: map['created'] as String,
+      isFavourite: map['isFavourite'] as bool,
     );
   }
 
@@ -107,17 +111,17 @@ class CharacterModel {
       data['episode'].forEach((el) => epizodesBus.add(el.toString()));
       return CharacterModel(
         id: data['id'],
-        name: data['name'] ?? "jui",
-        status: data['status'] ?? "jui",
-        species: data['species'] ?? "jui",
-        type: data['type'] ?? "jui",
-        gender: data['gender'] ?? "jui",
+        name: data['name'] ?? "",
+        status: data['status'] ?? "",
+        species: data['species'] ?? "",
+        type: data['type'] ?? "",
+        gender: data['gender'] ?? "",
         origin: OriginModel.fromNetwork(data['origin']),
         location: LocationModel.fromNetwork(data['location']),
-        image: data['image'] ?? "jui",
+        image: data['image'] ?? "",
         episode: epizodesBus,
-        url: data['url'] ?? "jui",
-        created: data['created'] ?? "jui",
+        url: data['url'] ?? "",
+        created: data['created'] ?? "",
       );
     } catch (e) {
       if (kDebugMode) {
@@ -134,7 +138,7 @@ class CharacterModel {
 
   @override
   String toString() {
-    return 'CharacterModel(id: $id, name: $name, status: $status, species: $species, type: $type, gender: $gender, origin: $origin, location: $location, image: $image, episode: $episode, url: $url, created: $created)';
+    return 'CharacterModel(id: $id, name: $name, status: $status, species: $species, type: $type, gender: $gender, origin: $origin, location: $location, image: $image, episode: $episode, url: $url, created: $created, isFavourite: $isFavourite)';
   }
 
   @override
@@ -152,7 +156,8 @@ class CharacterModel {
         other.image == image &&
         listEquals(other.episode, episode) &&
         other.url == url &&
-        other.created == created;
+        other.created == created &&
+        other.isFavourite == isFavourite;
   }
 
   @override
@@ -168,6 +173,7 @@ class CharacterModel {
         image.hashCode ^
         episode.hashCode ^
         url.hashCode ^
-        created.hashCode;
+        created.hashCode ^
+        isFavourite.hashCode;
   }
 }

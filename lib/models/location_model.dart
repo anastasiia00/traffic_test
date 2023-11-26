@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
-
 class LocationModel {
   final String name;
   final String url;
@@ -36,9 +34,6 @@ class LocationModel {
   }
 
   factory LocationModel.fromNetwork(dynamic data) {
-    if (kDebugMode) {
-      print(data);
-    }
     return LocationModel(
       name: data['name'],
       url: data['url'],

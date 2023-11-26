@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test_project/blocs/app/app_blocs.dart';
-import 'package:test_project/blocs/app/app_events.dart';
-import 'package:test_project/blocs/app/app_state.dart';
+import 'package:test_project/blocs/character/character_bloc.dart';
+import 'package:test_project/blocs/character/character_event.dart';
+import 'package:test_project/blocs/character/character_state.dart';
 import 'package:test_project/blocs/theme/theme_cubit.dart';
 import 'package:test_project/models/character_model.dart';
 import 'package:test_project/services/remote_services.dart';
 import 'package:test_project/views/detail_view.dart';
+import 'package:test_project/views/favourite/favourite_view.dart';
 import 'package:test_project/widgets/character_item.dart';
 
 class HomeView extends StatelessWidget {
@@ -14,10 +15,11 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final CharacterBloc bloc =
+        CharacterBloc(RepositoryProvider.of<RemoteServices>(context));
+
     return BlocProvider(
-      create: (context) =>
-          CharacterBloc(RepositoryProvider.of<RemoteServices>(context))
-            ..add(LoadCharacterEvent()),
+      create: (context) => bloc..add(LoadCharacterEvent()),
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -28,19 +30,60 @@ class HomeView extends StatelessWidget {
         drawer: BlocBuilder<ThemeCubit, ThemeState>(
           builder: (context, state) {
             return Drawer(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Switch(
-                    value: state.themeMode == ThemeMode.light ? false : true,
-                    onChanged: (bool value) {
-                      BlocProvider.of<ThemeCubit>(context).switchTheme();
-                    },
-                  ),
-                  const Text(
-                    'Theme Switcher',
-                  ),
-                ],
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  left: 16,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(builder: (context) {
+                            return FavouriteView(bloc: bloc);
+                          }));
+                        },
+                        child: const Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Favourite characters'),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                top: 8,
+                                bottom: 4,
+                                right: 16,
+                              ),
+                              child: Divider(
+                                height: 1,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        const Text(
+                          'Theme Switcher',
+                        ),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        Switch(
+                          value:
+                              state.themeMode == ThemeMode.light ? false : true,
+                          onChanged: (bool value) {
+                            BlocProvider.of<ThemeCubit>(context).switchTheme();
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             );
           },
@@ -59,31 +102,61 @@ class HomeView extends StatelessWidget {
                   vertical: 24,
                 ),
                 child: ListView.builder(
-                    itemCount: characterList.length,
-                    itemBuilder: ((_, index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
-                        child: InkWell(
-                          onLongPress: () {
-                            Navigator.of(context)
-                                .push(MaterialPageRoute(builder: (context) {
-                              return DetailView(element: characterList[index]);
-                            }));
+                  itemCount: characterList.length,
+                  itemBuilder: ((_, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return DetailView(
+                                  bloc: bloc,
+                                  characterModel: characterList[index],
+                                  onAddToFavourite: () {
+                                    bloc.add(
+                                      AddWishListCharacter(
+                                        characterList[index],
+                                      ),
+                                    );
+                                  },
+                                  onRemoveFromFavourite: () {
+                                    bloc.add(
+                                      RemoveFromWishListCharacter(
+                                        characterList[index],
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          );
+                        },
+                        child: CharacterItem(
+                          characterModel: characterList[index],
+                          onAddToFavourite: () {
+                            BlocProvider.of<CharacterBloc>(context).add(
+                              AddWishListCharacter(
+                                characterList[index],
+                              ),
+                            );
                           },
-                          child: CharacterItem(
-                            image: characterList[index].image,
-                            name: characterList[index].name,
-                            gender: characterList[index].gender,
-                            status: characterList[index].status,
-                            species: characterList[index].species,
-                            type: characterList[index].type,
-                          ),
+                          onRemoveFromFavourite: () {
+                            BlocProvider.of<CharacterBloc>(context).add(
+                              RemoveFromWishListCharacter(
+                                characterList[index],
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    })),
+                      ),
+                    );
+                  }),
+                ),
               );
             }
 
