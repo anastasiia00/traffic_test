@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:flutter/material.dart';
 import 'package:test_project/models/character_model.dart';
 import 'package:test_project/widgets/detail_item.dart';
@@ -15,23 +17,19 @@ class DetailView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(),
       body: Column(
-        // crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const SizedBox(
             height: 32,
           ),
-          element.name != null || element.status != null
-              ? Text(
-                  element.name + ' | ' + element.status,
-                  style: TextStyle(fontSize: 20),
-                )
-              : const SizedBox(),
+          Text(
+            '${element.name} | ${element.status}',
+            style: const TextStyle(fontSize: 20),
+          ),
           const SizedBox(
             height: 24,
           ),
           Image.network(
-            element.image ??
-                'https://media.istockphoto.com/illustrations/blank-man-profile-head-icon-placeholder-illustration-id1298261537?k=20&m=1298261537&s=612x612&w=0&h=8plXnK6Ur3LGqG9s-Xt2ZZfKk6bI0IbzDZrNH9tr9Ok=',
+            element.image,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(
@@ -55,7 +53,7 @@ class DetailView extends StatelessWidget {
                         title: 'Type of the character',
                         description: element.type,
                       )
-                    : SizedBox(),
+                    : const SizedBox(),
                 Padding(
                   padding: const EdgeInsets.only(
                     top: 4,
@@ -74,8 +72,7 @@ class DetailView extends StatelessWidget {
                     child: DetailItem(
                       title: 'Character\'s origin location',
                       description: element.origin.name,
-                    ) //TODO: element.origin.url
-                    ),
+                    )),
                 Padding(
                   padding: const EdgeInsets.only(
                     top: 4,
@@ -83,8 +80,7 @@ class DetailView extends StatelessWidget {
                   ),
                   child: DetailItem(
                     title: 'Character\'s last known location endpoint',
-                    description:
-                        element.location.name, //TODO: element.location.url
+                    description: element.location.name,
                   ),
                 ),
                 // Padding(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test_project/blocs/app_events.dart';
-import 'package:test_project/blocs/app_state.dart';
+import 'package:test_project/blocs/app/app_events.dart';
+import 'package:test_project/blocs/app/app_state.dart';
 import 'package:test_project/services/remote_services.dart';
 
 class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {

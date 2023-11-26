@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test_project/blocs/app_blocs.dart';
-import 'package:test_project/blocs/app_events.dart';
-import 'package:test_project/blocs/app_state.dart';
+import 'package:test_project/blocs/app/app_blocs.dart';
+import 'package:test_project/blocs/app/app_events.dart';
+import 'package:test_project/blocs/app/app_state.dart';
+import 'package:test_project/blocs/theme/theme_cubit.dart';
 import 'package:test_project/models/character_model.dart';
 import 'package:test_project/services/remote_services.dart';
 import 'package:test_project/views/detail_view.dart';
@@ -18,17 +19,36 @@ class HomeView extends StatelessWidget {
           CharacterBloc(RepositoryProvider.of<RemoteServices>(context))
             ..add(LoadCharacterEvent()),
       child: Scaffold(
-        backgroundColor: Colors.white,
         appBar: AppBar(
           title: const Text(
             'Choose your favourite character',
           ),
           centerTitle: true,
         ),
+        drawer: BlocBuilder<ThemeCubit, ThemeState>(
+          builder: (context, state) {
+            return Drawer(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Switch(
+                    value: state.themeMode == ThemeMode.light ? false : true,
+                    onChanged: (bool value) {
+                      BlocProvider.of<ThemeCubit>(context).switchTheme();
+                    },
+                  ),
+                  const Text(
+                    'Theme Switcher',
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
         body: BlocBuilder<CharacterBloc, CharacterState>(
           builder: (context, state) {
             if (state is CharacterLoadingState) {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             }
@@ -69,7 +89,7 @@ class HomeView extends StatelessWidget {
 
             if (state is CharacterErrorState) {
               return Center(
-                child: Container(
+                child: SizedBox(
                   height: 400,
                   child: Column(
                     children: [
@@ -92,7 +112,7 @@ class HomeView extends StatelessWidget {
                 ),
               );
             }
-            return SizedBox();
+            return const SizedBox();
           },
         ),
       ),

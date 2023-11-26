@@ -51,40 +51,15 @@ class CharacterItem extends StatelessWidget {
                       ? Text(
                           name!,
                         )
-                      : SizedBox(),
+                      : const SizedBox(),
                   gender != null
                       ? Text(
                           gender!,
                         )
-                      : SizedBox(),
+                      : const SizedBox(),
                 ],
               ),
             ),
-            // Padding(
-            //   padding: const EdgeInsets.only(
-            //     left: 16,
-            //   ),
-            //   child: Column(
-            //     crossAxisAlignment: CrossAxisAlignment.start,
-            //     children: [
-            //       status != null
-            //           ? Text(
-            //               status!,
-            //             )
-            //           : SizedBox(),
-            //       species != null
-            //           ? Text(
-            //               species!,
-            //             )
-            //           : SizedBox(),
-            //       type != null
-            //           ? Text(
-            //               type!,
-            //             )
-            //           : SizedBox(),
-            //     ],
-            //   ),
-            // ),
           ],
         ),
       ),

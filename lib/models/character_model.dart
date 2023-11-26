@@ -120,7 +120,9 @@ class CharacterModel {
         created: data['created'] ?? "jui",
       );
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       throw Exception();
     }
   }

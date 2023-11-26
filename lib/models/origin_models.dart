@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+
 class OriginModel {
   final String name;
   final String url;
@@ -33,7 +35,9 @@ class OriginModel {
   }
 
   factory OriginModel.fromNetwork(dynamic data) {
-    print(data);
+    if (kDebugMode) {
+      print(data);
+    }
     return OriginModel(
       name: data['name'],
       url: data['url'],

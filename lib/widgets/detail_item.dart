@@ -18,7 +18,7 @@ class DetailItem extends StatelessWidget {
         Expanded(
           flex: 1,
           child: Text(
-            title + ':  ',
+            '$title:  ',
             style: const TextStyle(
               fontWeight: FontWeight.bold,
             ),
